@@ -1,4 +1,6 @@
-streamlit>=1.0
-langchain-chroma  
+streamlit
+langchain-chroma
 langchain-upstage
 langchain-core
+chromadb
+pysqlite3-binary
