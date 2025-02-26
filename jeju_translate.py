@@ -42,7 +42,7 @@ def create_vectorstore():
         UpstageEmbeddings(model="embedding-passage"),
         persist_directory="/tmp/chroma_db"  # 임시 저장소 경로 (Streamlit Cloud에서 사용 가능)
     )
-    # persist() 호출은 제거했습니다. (해당 메서드가 제공되지 않으므로)
+    # persist() 호출 제거 (해당 메서드가 제공되지 않음)
     
     print(f"✅ 벡터스토어 생성 완료 - 총 소요 시간: {time.time() - start_time:.2f}초")
     return vectorstore.as_retriever(k=3)
@@ -60,7 +60,8 @@ def translate_jeju_to_korean(query):
         ("system", "제주어 문장을 한국어로 자연스럽게 번역하세요."),
         ("human", f"제주어 문장: {query}\n번역 후보: {translations}")
     ])
-    response = chat.invoke({"input": prompt.format_messages()})
+    # chat.invoke에 딕셔너리 대신 메시지 리스트를 직접 넘깁니다.
+    response = chat.invoke(prompt.format_messages())
     return response["answer"]
 
 # ✅ Streamlit UI 설정
