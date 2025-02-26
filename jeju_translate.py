@@ -17,7 +17,7 @@ from langchain_core.documents import Document
 SOLAR_API_KEY = os.getenv("UPSTAGE_API_KEY")
 
 # ✅ 제주어-한국어 병렬 데이터 로드
-def load_parallel_data(jeju_path, korean_path, sample_size=500):  # ✅ 샘플 크기 제한 추가
+def load_parallel_data(jeju_path, korean_path, sample_size=500):  # ✅ 샘플 크기 제한 적용
     jeju_sentences = open(jeju_path, "r", encoding="utf-8").readlines()[:sample_size]
     korean_sentences = open(korean_path, "r", encoding="utf-8").readlines()[:sample_size]
     
@@ -42,8 +42,7 @@ def create_vectorstore():
         UpstageEmbeddings(model="embedding-passage"),
         persist_directory="/tmp/chroma_db"  # 임시 저장소 경로 (Streamlit Cloud에서 사용 가능)
     )
-    # 데이터베이스 스키마(테이블)가 생성되도록 persist 호출
-    vectorstore.persist()
+    # persist() 호출은 제거했습니다. (해당 메서드가 제공되지 않으므로)
     
     print(f"✅ 벡터스토어 생성 완료 - 총 소요 시간: {time.time() - start_time:.2f}초")
     return vectorstore.as_retriever(k=3)
