@@ -36,9 +36,16 @@ def create_vectorstore():
     print(f"✅ 데이터 로드 완료 - 소요 시간: {time.time() - start_time:.2f}초")
 
     print("📌 벡터스토어 생성 시작...")
-    vectorstore = Chroma.from_documents(docs, UpstageEmbeddings(model="embedding-passage"))  # ✅ 작은 모델 사용
+    # persist_directory를 지정하여 쓰기 가능한 경로에 데이터베이스를 생성
+    vectorstore = Chroma.from_documents(
+        docs,
+        UpstageEmbeddings(model="embedding-passage"),
+        persist_directory="/tmp/chroma_db"  # 임시 저장소 경로 (Streamlit Cloud에서 사용 가능)
+    )
+    # 데이터베이스 스키마(테이블)가 생성되도록 persist 호출
+    vectorstore.persist()
+    
     print(f"✅ 벡터스토어 생성 완료 - 총 소요 시간: {time.time() - start_time:.2f}초")
-
     return vectorstore.as_retriever(k=3)
 
 retriever = create_vectorstore()
@@ -66,5 +73,3 @@ if query:
     result = translate_jeju_to_korean(query)
     st.write("### 번역 결과:")
     st.success(result)
-
-
