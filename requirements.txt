@@ -1,0 +1,4 @@
+streamlit>=1.0
+langchain-chroma  
+langchain-upstage
+langchain-core
