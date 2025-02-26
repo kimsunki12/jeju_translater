@@ -16,7 +16,7 @@ from langchain_core.documents import Document
 SOLAR_API_KEY = os.getenv("UPSTAGE_API_KEY")
 
 # ✅ 제주어-한국어 병렬 데이터 로드
-def load_parallel_data(jeju_path, korean_path, sample_size=500):
+def load_parallel_data(jeju_path, korean_path):
     jeju_sentences = open(jeju_path, "r", encoding="utf-8").readlines()[:sample_size]
     korean_sentences = open(korean_path, "r", encoding="utf-8").readlines()[:sample_size]
     
@@ -31,7 +31,7 @@ def create_vectorstore():
     start_time = time.time()
     
     print("📌 제주어-한국어 데이터 로딩 시작...")
-    docs = load_parallel_data("je.train", "ko.train", sample_size=500)
+    docs = load_parallel_data("je.train", "ko.train")
     print(f"✅ 데이터 로드 완료 - 소요 시간: {time.time() - start_time:.2f}초")
 
     print("📌 벡터스토어 생성 시작...")
@@ -53,7 +53,7 @@ def translate_jeju_to_korean(query):
     
     # ✅ Solar LLM API를 활용해 자연스러운 번역 생성
     prompt = ChatPromptTemplate.from_messages([
-        ("system", "제주어 문장을 한국어로 자연스럽게 번역하세요."),
+        ("system", "당신은 제주 방언을 전문적으로 표준어로 번역하는 AI 모델 입니다. 아래의 원문(제주 방언)을 읽고, 표준 한국어로 자연스럽게 번역하세요. 번역 외의 추가 코멘트는 넣지 않습니다."),
         ("human", f"제주어 문장: {query}\n번역 후보: {translations}")
     ])
     response = chat.invoke(prompt.format_messages())
