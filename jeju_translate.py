@@ -16,7 +16,7 @@ from langchain_core.documents import Document
 SOLAR_API_KEY = os.getenv("UPSTAGE_API_KEY")
 
 # ✅ 제주어-한국어 병렬 데이터 로드
-def load_parallel_data(jeju_path, korean_path, sample_size=None):
+def load_parallel_data(jeju_path, korean_path, sample_size=1000):
     jeju_sentences = open(jeju_path, "r", encoding="utf-8").readlines()[:sample_size]
     korean_sentences = open(korean_path, "r", encoding="utf-8").readlines()[:sample_size]
     
@@ -31,7 +31,7 @@ def create_vectorstore():
     start_time = time.time()
     
     print("📌 제주어-한국어 데이터 로딩 시작...")
-    docs = load_parallel_data("je.train", "ko.train", sample_size=None)
+    docs = load_parallel_data("je.train", "ko.train", sample_size=1000)
     print(f"✅ 데이터 로드 완료 - 소요 시간: {time.time() - start_time:.2f}초")
 
     print("📌 벡터스토어 생성 시작...")
