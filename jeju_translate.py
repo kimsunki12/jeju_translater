@@ -1,10 +1,17 @@
+import pysqlite3
+import sys
+# 표준 라이브러리 sqlite3 대신 pysqlite3를 사용하도록 교체
+sys.modules["sqlite3"] = pysqlite3
+
 import os
 import time
 import streamlit as st
+
+# pysqlite3 교체가 끝난 후에 langchain_chroma 임포트
 from langchain_chroma import Chroma
 from langchain_upstage import UpstageEmbeddings, ChatUpstage
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.documents import Document  # ✅ 추가됨
+from langchain_core.documents import Document
 
 # ✅ 환경 변수 로드
 SOLAR_API_KEY = os.getenv("UPSTAGE_API_KEY")
